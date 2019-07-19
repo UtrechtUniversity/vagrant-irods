@@ -8,5 +8,5 @@ You'll need [VirtualBox](https://www.virtualbox.org/wiki/Downloads), as well as 
 
 # Included configurations
 
-- irods-test: a basic plain vanilla iRODS server for local testing
-- irods-icommands: a VM which contains the icommands tools for remote administration of iRODS
+- irods-test: a basic plain vanilla iRODS server for local testing (Ubuntu 18.04 LTS)
+- irods-icommands: a VM which contains the icommands tools for remote administration of iRODS (Ubuntu 18.04 LTS or CentOS)

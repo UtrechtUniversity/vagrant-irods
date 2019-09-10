@@ -1,0 +1,14 @@
+dist: bionic
+
+language: minimal
+
+sudo: false
+
+install:
+- sudo apt update
+- sudo apt install -y shellcheck
+- wget https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.deb
+- sudo dpkg -i vagrant_2.2.5_x86_64.deb
+
+script:
+- ci/validate-shell-scripts.sh

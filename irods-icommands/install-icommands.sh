@@ -20,7 +20,7 @@ then
   echo "Installing irods-commands on CentOS."
 
   echo "Installing dependencies ..."
-  sudo yum -y install wget epel-release
+  sudo yum -y install wget epel-release yum-plugin-versionlock
   
   echo "Adding iRODS repository ..."
   sudo rpm --import https://packages.irods.org/irods-signing-key.asc
@@ -28,13 +28,17 @@ then
 
   for package in $YUM_PACKAGES
   do echo "Installing package $package and its dependencies"
-     sudo yum -y install "$package"
+     sudo yum -y install "$package-${IRODS_VERSION}"
+     sudo yum versionlock "$package"
   done 
 
 elif lsb_release -i | grep -q Ubuntu
 then
 
   echo "Installing irods-commands on Ubuntu."
+
+  echo "Installing dependencies ..."
+  sudo apt-get -y install aptitude
 
   echo "Downloading and installing iRODS repository signing key ..."
   wget -qO - "$APT_IRODS_REPO_SIGNING_KEY_LOC" | sudo apt-key add -
@@ -47,7 +51,8 @@ ENDAPTREPO
 
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies"
-     sudo apt-get -y install "$package"
+     sudo apt-get -y install "$package=${IRODS_VERSION}"
+     sudo aptitude hold "$package"
   done
 
 else

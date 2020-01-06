@@ -28,8 +28,8 @@ then
   echo "Adding EPEL release repository ..."
   sudo yum install -y epel-release
 
-  echo "Installing package dependencies of install-irods script ..."
-  sudo yum install -y pwgen wget
+  echo "Installing dependencies of installation script ..."
+  sudo yum install -y pwgen wget yum-plugin-versionlock
 
   echo "Importing repository signing key .."
   sudo rpm --import "$YUM_IRODS_REPO_SIGNING_KEY_LOC"
@@ -41,8 +41,9 @@ then
   sudo yum install -y pwgen nmap
 
   for package in $YUM_PACKAGES
-  do echo "Installing package $package and its dependencies"
-     sudo yum -y install "$package"
+  do echo "Installing package $package and its dependencies ..."
+     sudo yum -y install "$package-${IRODS_VERSION}"
+     sudo yum versionlock "$package"
   done
 
 elif lsb_release -i | grep -q Ubuntu
@@ -57,20 +58,19 @@ deb [arch=${APT_IRODS_REPO_ARCHITECTURE}] $APT_IRODS_REPO_URL $APT_IRODS_REPO_DI
 ENDAPTREPO
   sudo apt-get update
 
+  echo "Installing dependencies of installation script ..."
+  sudo apt-get install -y pwgen nmap aptitude
+
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies"
-     sudo apt-get -y install "$package"
+     sudo apt-get -y install "$package=${IRODS_VERSION}"
+     sudo aptitude hold "$package"
   done
-
-  echo "Installing package dependencies of install-irods script ..."
-  sudo apt-get install -y pwgen nmap
-
 
 else
   echo "Error: did not recognize distribution/image."
   exit 1
 fi
-
 
 set +u
 

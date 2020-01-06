@@ -28,8 +28,8 @@ then
   echo "Adding EPEL release repository ..."
   sudo yum install -y epel-release
 
-  echo "Installing package dependencies of install-irods script ..."
-  sudo yum install -y pwgen wget
+  echo "Installing dependencies of installation script ..."
+  sudo yum install -y pwgen wget yum-plugin-versionlock
 
   echo "Importing repository signing key .."
   sudo rpm --import "$YUM_IRODS_REPO_SIGNING_KEY_LOC"
@@ -37,12 +37,15 @@ then
   echo "Adding iRODS repository ..."
   wget -qO - "$YUM_REPO_FILE_LOC" | sudo tee /etc/yum.repos.d/renci-irods.yum.repo
 
-  echo "Installing package dependencies of install-irods script ..."
-  sudo yum install -y pwgen
+  for package in $YUM_DATABASE_PACKAGES
+  do echo "Installing database package $package and its dependencies ..."
+     yum -y install "$package"
+  done
 
   for package in $YUM_PACKAGES
-  do echo "Installing package $package and its dependencies"
-     sudo yum -y install "$package"
+  do echo "Installing package $package and its dependencies ..."
+     sudo yum -y install "$package-${IRODS_VERSION}"
+     sudo yum versionlock "$package"
   done
 
   echo "Initializing database ..."
@@ -67,14 +70,19 @@ deb [arch=${APT_IRODS_REPO_ARCHITECTURE}] $APT_IRODS_REPO_URL $APT_IRODS_REPO_DI
 ENDAPTREPO
   sudo apt-get update
 
-  for package in $APT_PACKAGES
-  do echo "Installing package $package and its dependencies"
-     sudo apt-get -y install "$package"
+  echo "Installing dependencies of installation script ..."
+  sudo apt-get -y install aptitude pwgen
+
+  for package in $APT_DATABASE_PACKAGES
+  do echo "Installing database package $package and its dependencies ..."
+     apt -y install "$package"
   done
 
-  echo "Installing package dependencies of install-irods script ..."
-  sudo apt-get install -y pwgen
-
+  for package in $APT_PACKAGES
+  do echo "Installing package $package and its dependencies ..."
+     sudo apt-get -y install "$package=${IRODS_VERSION}"
+     sudo aptitude hold "$package"
+  done
 
 else
   echo "Error: did not recognize distribution/image."

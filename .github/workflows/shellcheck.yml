@@ -1,0 +1,16 @@
+name: Shellcheck
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Shellcheck
+      run: |
+        cd "${GITHUB_WORKSPACE}"
+        sudo apt -y install shellcheck
+        shellcheck $(find . -name "*.sh")

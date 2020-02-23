@@ -6,7 +6,7 @@ This repository contains Vagrant configurations for local iRODS VMs.
 
 * Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 * Install [Vagrant 2.x](https://www.vagrantup.com/downloads.html)
-* Install the vagrant-env plugin:  _vagrant plugin install vagrant-env_
+* Install the vagrant-env and vagrant-disksize plugin:  _vagrant plugin install vagrant-env vagrant-disksize_
 
 # Included configurations
 

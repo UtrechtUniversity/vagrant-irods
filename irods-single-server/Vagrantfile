@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
       v.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
     end
     provider.vm.provision "file", source: ".env", destination: "/tmp/irods-test.env"
+    provider.vm.provision :shell, :path => '../_common/update-ipv6-settings.sh', :args => "/tmp/irods-test.env"
     provider.vm.provision :shell, :path => '../_common/install-irods-provider.sh', :args => "/tmp/irods-test.env"
   end
 

@@ -14,7 +14,7 @@ This repository contains Vagrant configurations for local iRODS VMs.
 - irods-provider-consumer: an iRODS zone consisting of a provider and a single consumer. It can run on either a CentOS 7 image or a Ubuntu 18.04 LTS image. The VMs are meant for local testing, and run with default key values.
 - irods-icommands: a VM which contains the icommands tools for remote administration of iRODS. It can run on either a CentOS 7 image or a Ubuntu 18.04 LTS image.
 
-These scripts should support the 4.2.x iRODS versions that are available through the package repositories. As of 6 January 2020, versions 4.2.2 through 4.2.8 are available in the repositories.
+These scripts should support the 4.2.x iRODS versions that are available through the package repositories. As of 5 June 2020, versions 4.2.2 through 4.2.8 are available in the repositories.
 
 # Usage
 

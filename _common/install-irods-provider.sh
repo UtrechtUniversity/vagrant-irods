@@ -44,7 +44,16 @@ then
 
   for package in $YUM_PACKAGES
   do echo "Installing package $package and its dependencies ..."
-     sudo yum -y install "$package-${IRODS_VERSION}"
+     if [ "$package" == "irods-rule-engine-plugin-python" ]
+     then
+	 if [ "$IRODS_VERSION" == "4.2.8" ]
+	 then package_version="4.2.8.0"
+	 else package_version="$IRODS_VERSION"
+	 fi
+     else
+	 package_version="$IRODS_VERSION"
+     fi
+     sudo yum -y install "$package-$package_version"
      sudo yum versionlock "$package"
   done
 
@@ -80,7 +89,16 @@ ENDAPTREPO
 
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies ..."
-     sudo apt-get -y install "$package=${IRODS_VERSION}"
+     if [ "$package" == "irods-rule-engine-plugin-python" ]
+     then
+         if [ "$IRODS_VERSION" == "4.2.8" ]
+         then package_version="4.2.8.0"
+         else package_version="$IRODS_VERSION"
+         fi
+     else
+         package_version="$IRODS_VERSION"
+     fi
+     sudo apt-get -y install "$package=$package_version"
      sudo aptitude hold "$package"
   done
 

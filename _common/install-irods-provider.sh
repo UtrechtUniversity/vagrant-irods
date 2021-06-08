@@ -48,6 +48,8 @@ then
      then
 	 if [ "$IRODS_VERSION" == "4.2.8" ]
 	 then package_version="4.2.8.0"
+         elif [ "$IRODS_VERSION" == "4.2.9" ]
+         then package_version="4.2.9.0"
 	 else package_version="$IRODS_VERSION"
 	 fi
      else
@@ -93,6 +95,8 @@ ENDAPTREPO
      then
          if [ "$IRODS_VERSION" == "4.2.8" ]
          then package_version="4.2.8.0"
+         elif [ "$IRODS_VERSION" == "4.2.9" ]
+         then package_version="4.2.9.0"
          else package_version="$IRODS_VERSION"
          fi
      else
@@ -163,3 +167,8 @@ rods
 
 
 IRODS_SETUP_END
+
+# Restart is needed for iRODS 4.2.9+
+sudo /etc/init.d/irods restart
+
+echo "Provider install script finished."

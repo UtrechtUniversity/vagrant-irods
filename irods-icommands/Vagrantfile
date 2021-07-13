@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
     end
     vm.vm.provision "file", source: ".env", destination: "/tmp/irods-test.env"
     vm.vm.provision :shell, :path => '../_common/update-ipv6-settings.sh', :args => "/tmp/irods-test.env"
+    vm.vm.provision :shell, :path => '../_common/initialize-network-settings.sh', :args => "/tmp/irods-test.env"
     vm.vm.provision :shell, :path => 'install-icommands.sh', :args => "/tmp/irods-test.env"
   end
 

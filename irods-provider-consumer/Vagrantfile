@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
     provider.vm.provision "file", source: ".env", destination: "/tmp/irods-test.env"
     provider.vm.provision :shell, :path => '../_common/update-ipv6-settings.sh', :args => "/tmp/irods-test.env"
     provider.vm.provision :shell, :path => '../_common/initialize-hosts-file.sh', :args => "/tmp/irods-test.env"
+    provider.vm.provision :shell, :path => '../_common/initialize-network-settings.sh', :args => "/tmp/irods-test.env"
     provider.vm.provision :shell, :path => '../_common/install-irods-provider.sh', :args => "/tmp/irods-test.env"
     provider.vm.network "private_network", ip: ENV['PROVIDER_IP']
   end
@@ -34,6 +35,7 @@ Vagrant.configure("2") do |config|
     consumer.vm.provision "file", source: ".env", destination: "/tmp/irods-test.env"
     consumer.vm.provision :shell, :path => '../_common/update-ipv6-settings.sh', :args => "/tmp/irods-test.env"
     consumer.vm.provision :shell, :path => '../_common/initialize-hosts-file.sh' , :args => "/tmp/irods-test.env"
+    consumer.vm.provision :shell, :path => '../_common/initialize-network-settings.sh', :args => "/tmp/irods-test.env"
     consumer.vm.provision :shell, :path => '../_common/install-irods-consumer.sh', :args => "/tmp/irods-test.env"
     consumer.vm.network "private_network", ip: ENV['CONSUMER_IP']
   end

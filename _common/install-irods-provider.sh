@@ -68,6 +68,7 @@ then
 
   echo "Starting database ..."
   sudo systemctl start postgresql
+  sudo systemctl enable postgresql
 
 elif lsb_release -i | grep -q Ubuntu
 then

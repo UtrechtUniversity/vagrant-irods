@@ -48,6 +48,8 @@ then
          then package_version="4.2.8.0"
          elif [ "$IRODS_VERSION" == "4.2.9" ]
          then package_version="4.2.9.0"
+         elif [ "$IRODS_VERSION" == "4.2.10" ]
+         then package_version="4.2.10.0"
          else package_version="$IRODS_VERSION"
          fi
      else
@@ -80,6 +82,8 @@ ENDAPTREPO
          then package_version="4.2.8.0"
          elif [ "$IRODS_VERSION" == "4.2.9" ]
          then package_version="4.2.9.0"
+         elif [ "$IRODS_VERSION" == "4.2.10" ]
+         then package_version="4.2.10.0"
          else package_version="$IRODS_VERSION"
          fi
      else

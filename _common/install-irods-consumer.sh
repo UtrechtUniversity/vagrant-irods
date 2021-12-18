@@ -34,6 +34,9 @@ then
   echo "Importing repository signing key .."
   sudo rpm --import "$YUM_IRODS_REPO_SIGNING_KEY_LOC"
 
+  echo "Updating certificates for retrieving repository key ..."
+  sudo yum update -y ca-certificates
+
   echo "Adding iRODS repository ..."
   wget -qO - "$YUM_REPO_FILE_LOC" | sudo tee /etc/yum.repos.d/renci-irods.yum.repo
 

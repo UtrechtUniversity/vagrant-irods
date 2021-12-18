@@ -14,6 +14,9 @@ then source "$SETTINGSFILE"
 else echo "Error: settings file $SETTINGSFILE not found." && exit 1
 fi
 
+# shellcheck disable=SC1091
+source /tmp/common_functions.sh
+
 set +u
 if [ -n "$CONSUMER_HOSTNAME" ]
 then echo "Setting hostname ..."
@@ -45,19 +48,9 @@ then
 
   for package in $YUM_PACKAGES
   do echo "Installing package $package and its dependencies ..."
-     if [ "$package" == "irods-rule-engine-plugin-python" ]
-     then
-         if [ "$IRODS_VERSION" == "4.2.8" ]
-         then package_version="4.2.8.0"
-         elif [ "$IRODS_VERSION" == "4.2.9" ]
-         then package_version="4.2.9.0"
-         elif [ "$IRODS_VERSION" == "4.2.10" ]
-         then package_version="4.2.10.0"
-         else package_version="$IRODS_VERSION"
-         fi
-     else
-         package_version="$IRODS_VERSION"
-     fi
+     get_package_version "$package" "$IRODS_VERSION"
+     # $package_version is set by sourced function
+     # shellcheck disable=SC2154
      sudo yum -y install "$package-$package_version"
      sudo yum versionlock "$package"
   done
@@ -79,19 +72,7 @@ ENDAPTREPO
 
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies ..."
-     if [ "$package" == "irods-rule-engine-plugin-python" ]
-     then
-         if [ "$IRODS_VERSION" == "4.2.8" ]
-         then package_version="4.2.8.0"
-         elif [ "$IRODS_VERSION" == "4.2.9" ]
-         then package_version="4.2.9.0"
-         elif [ "$IRODS_VERSION" == "4.2.10" ]
-         then package_version="4.2.10.0"
-         else package_version="$IRODS_VERSION"
-         fi
-     else
-         package_version="$IRODS_VERSION"
-     fi
+     get_package_version "$package" "$IRODS_VERSION"
      sudo apt-get -y install "$package=$package_version"
      sudo aptitude hold "$package"
   done

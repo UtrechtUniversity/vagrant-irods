@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
       v.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
     end
     provider.vm.provision "file", source: ".env", destination: "/tmp/irods-test.env"
+    provider.vm.provision "file", source: "../_common/common_functions.sh", destination: "/tmp/common_functions.sh"
     provider.vm.provision :shell, :path => '../_common/update-ipv6-settings.sh', :args => "/tmp/irods-test.env"
     provider.vm.provision :shell, :path => '../_common/initialize-hosts-file.sh', :args => "/tmp/irods-test.env"
     provider.vm.provision :shell, :path => '../_common/initialize-network-settings.sh', :args => "/tmp/irods-test.env"
@@ -33,6 +34,7 @@ Vagrant.configure("2") do |config|
       v.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
     end
     consumer.vm.provision "file", source: ".env", destination: "/tmp/irods-test.env"
+    consumer.vm.provision "file", source: "../_common/common_functions.sh", destination: "/tmp/common_functions.sh"
     consumer.vm.provision :shell, :path => '../_common/update-ipv6-settings.sh', :args => "/tmp/irods-test.env"
     consumer.vm.provision :shell, :path => '../_common/initialize-hosts-file.sh' , :args => "/tmp/irods-test.env"
     consumer.vm.provision :shell, :path => '../_common/initialize-network-settings.sh', :args => "/tmp/irods-test.env"

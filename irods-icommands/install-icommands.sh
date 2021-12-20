@@ -14,6 +14,9 @@ then source "$SETTINGSFILE"
 else echo "Error: settings file $SETTINGSFILE not found." && exit 1
 fi
 
+# shellcheck disable=SC1091
+source /tmp/common_functions.sh
+
 if [ -f /etc/centos-release ]
 then 
 
@@ -31,7 +34,9 @@ then
 
   for package in $YUM_PACKAGES
   do echo "Installing package $package and its dependencies"
-     sudo yum -y install "$package-${IRODS_VERSION}"
+     get_package_version "$package" "$IRODS_VERSION" "centos"
+     # shellcheck disable=SC2154
+     sudo yum -y install "$package-${package_version}"
      sudo yum versionlock "$package"
   done 
 
@@ -54,7 +59,8 @@ ENDAPTREPO
 
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies"
-     sudo apt-get -y install "$package=${IRODS_VERSION}"
+     get_package_version "$package" "$IRODS_VERSION" "ubuntu"
+     sudo apt-get -y install "$package=${package_version}"
      sudo aptitude hold "$package"
   done
 

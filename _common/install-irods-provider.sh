@@ -50,7 +50,7 @@ then
 
   for package in $YUM_PACKAGES
   do echo "Installing package $package and its dependencies ..."
-     get_package_version "$package" "$IRODS_VERSION"
+     get_package_version "$package" "$IRODS_VERSION" "centos"
      # $package_version is set by sourced function
      # shellcheck disable=SC2154
      sudo yum -y install "$package-$package_version"
@@ -90,7 +90,7 @@ ENDAPTREPO
 
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies ..."
-     get_package_version "$package" "$IRODS_VERSION"
+     get_package_version "$package" "$IRODS_VERSION" "ubuntu"
      sudo apt-get -y install "$package=$package_version"
      sudo aptitude hold "$package"
   done

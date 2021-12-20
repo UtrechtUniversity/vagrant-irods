@@ -21,6 +21,9 @@ then
 
   echo "Installing dependencies ..."
   sudo yum -y install wget epel-release yum-plugin-versionlock
+
+  echo "Updating certificates for retrieving repository key ..."
+  sudo yum update -y ca-certificates
   
   echo "Adding iRODS repository ..."
   sudo rpm --import https://packages.irods.org/irods-signing-key.asc

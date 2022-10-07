@@ -119,7 +119,7 @@ vagrant
 vagrant
 0
 consumer
-testZone
+$ZONE_NAME
 $PROVIDER_HOSTNAME
 1247
 20000

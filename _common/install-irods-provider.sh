@@ -141,7 +141,7 @@ irods
 y
 $DB_PASSWORD
 
-testZone
+$ZONE_NAME
 1247
 20000
 20199

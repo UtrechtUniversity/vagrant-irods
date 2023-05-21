@@ -62,6 +62,10 @@ then
   wget -qO - "$APT_IRODS_REPO_SIGNING_KEY_LOC" | sudo apt-key add -
 
   echo "Adding iRODS repository ..."
+ if [ "$IRODS_VERSION" == "4.2.12" ]
+  then APT_IRODS_REPO_DISTRIBUTION="bionic"
+  else APT_IRODS_REPO_DISTRIBUTION="xenial"
+  fi
 cat << ENDAPTREPO | sudo tee /etc/apt/sources.list.d/irods.list
 deb [arch=${APT_IRODS_REPO_ARCHITECTURE}] $APT_IRODS_REPO_URL $APT_IRODS_REPO_DISTRIBUTION $APT_IRODS_REPO_COMPONENT
 ENDAPTREPO

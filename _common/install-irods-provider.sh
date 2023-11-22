@@ -4,6 +4,45 @@
 set -e
 set -o pipefail
 set -u
+set -x
+
+configure_provider_4dot2 () {
+	# Test configuration has been adapted from:
+	# https	://github.com/irods/irods/blob/4-2-stable/plugins/database/packaging/localhost_setup_postgres.input
+	sudo python /var/lib/irods/scripts/setup_irods.py <<- IRODS_SETUP_END
+	vagrant
+	vagrant
+	
+	
+	localhost
+	5432
+	ICAT
+	irods
+	y
+	$DB_PASSWORD
+	
+	$ZONE_NAME
+	1247
+	20000
+	20199
+	1248
+	
+	rods
+	y
+	$ZONE_KEY
+	$NEG_KEY
+	$CP_KEY
+	rods
+	
+		
+	IRODS_SETUP_END
+}
+
+configure_provider_4dot3 () {
+	export PROVIDER_HOSTNAME DB_PASSWORD ZONE_NAME ZONE_KEY NEG_KEY CP_KEY ADMIN_PASSWORD
+	envsubst < /tmp/provider-unattended-install.irods-4.3.template > /tmp/provider-unattended-install.irods-4.3.config
+	sudo python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file /tmp/provider-unattended-install.irods-4.3.config
+}
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -68,24 +107,36 @@ then
   sudo systemctl start postgresql
   sudo systemctl enable postgresql
 
+  if [[ "$IRODS_VERSION" =~ ^4\.3\. ]]
+  then sudo yum -y install gcc gcc-c++ python36-devel unixODBC-devel
+       sudo python3 -m pip install pyodbc
+  fi
+
 elif lsb_release -i | grep -q Ubuntu
 then
+
+  if [ "$IRODS_VERSION" == "4.2.12" ]
+  then APT_IRODS_REPO_DISTRIBUTION="bionic"
+  elif [[ "$IRODS_VERSION" =~ ^4\.2\. ]]
+  then APT_IRODS_REPO_DISTRIBUTION="xenial"
+  else APT_IRODS_REPO_DISTRIBUTION="focal"
+  fi
 
   echo "Downloading and installing iRODS repository signing key ..."
   wget -qO - "$APT_IRODS_REPO_SIGNING_KEY_LOC" | sudo apt-key add -
 
-  echo "Adding iRODS repository ..."
- if [ "$IRODS_VERSION" == "4.2.12" ]
-  then APT_IRODS_REPO_DISTRIBUTION="bionic"
-  else APT_IRODS_REPO_DISTRIBUTION="xenial"
-  fi
 cat << ENDAPTREPO | sudo tee /etc/apt/sources.list.d/irods.list
 deb [arch=${APT_IRODS_REPO_ARCHITECTURE}] $APT_IRODS_REPO_URL $APT_IRODS_REPO_DISTRIBUTION $APT_IRODS_REPO_COMPONENT
 ENDAPTREPO
   sudo apt-get update
 
-  echo "Installing dependencies of installation script ..."
-  sudo apt-get -y install aptitude pwgen
+  if [[ "$IRODS_VERSION" =~ ^4\.3\. ]]
+  then sudo apt -y install python3-pyodbc
+  else sudo apt -y install python-pyodbc
+  fi
+
+  echo "Installing dependencies of installation script and misc dependencies ..."
+  sudo apt-get -y install aptitude pwgen python3-pip
 
   for package in $APT_DATABASE_PACKAGES
   do echo "Installing database package $package and its dependencies ..."
@@ -122,6 +173,10 @@ if [ -z "$DB_PASSWORD" ]
 then DB_PASSWORD=$(pwgen -N 1 -n 16)
 fi
 
+if [ -z "$ADMIN_PASSWORD" ]
+then ADMIN_PASSWORD=$(pwgen -N 1 -n 16)
+fi
+
 set -u
 
 sudo -u postgres psql <<PSQL_END
@@ -131,35 +186,14 @@ GRANT ALL PRIVILEGES ON DATABASE "ICAT" TO irods;
 \q
 PSQL_END
 
-# Test configuration has been adapted from:
-# https://github.com/irods/irods/blob/4-2-stable/plugins/database/packaging/localhost_setup_postgres.input
-sudo python /var/lib/irods/scripts/setup_irods.py << IRODS_SETUP_END
-vagrant
-vagrant
-
-
-localhost
-5432
-ICAT
-irods
-y
-$DB_PASSWORD
-
-$ZONE_NAME
-1247
-20000
-20199
-1248
-
-rods
-y
-$ZONE_KEY
-$NEG_KEY
-$CP_KEY
-rods
-
-
-IRODS_SETUP_END
+if [[ "$IRODS_VERSION" =~ ^4\.2\. ]]
+then echo "Setting up iRODS 4.2 on provider."
+     configure_provider_4dot2
+elif [[ "$IRODS_VERSION" =~ ^4\.3\. ]]
+then echo "Setting up iRODS 4.3 on provider."
+     configure_provider_4dot3
+else echo "Configuring iRODS version $IRODS_VERSION has not been implemented."
+fi
 
 # Restart is needed for iRODS 4.2.9+
 sudo /etc/init.d/irods restart

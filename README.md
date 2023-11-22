@@ -10,12 +10,19 @@ This repository contains Vagrant configurations for local iRODS VMs.
 
 # Included configurations
 
-- irods-single-server: a basic plain vanilla iRODS server for local testing. It can run on either a CentOS 7 image or a Ubuntu 18.04 LTS image.
-- irods-provider-consumer: an iRODS zone consisting of a provider and a single consumer. It can run on either a CentOS 7 image or a Ubuntu 18.04 LTS image. The VMs are meant for local testing, and run with default key values.
-- irods-icommands: a VM which contains the icommands tools for remote administration of iRODS. It can run on either a CentOS 7 image or a Ubuntu 18.04 LTS image.
+- irods-single-server: a basic plain vanilla iRODS server for local testing.
+- irods-provider-consumer: an iRODS zone consisting of a provider and a single consumer. The VMs are meant for local testing, and run with default key values.
+- irods-icommands: a VM which contains the icommands tools for remote administration of iRODS.
 
-These scripts should support the 4.2.x iRODS versions that are available through the package repositories. As of 20 May 2023, versions 4.2.2 through 4.2.12 are available in the repositories.
-Version 4.3.0 is available in the repository, but not yet supported.
+These scripts should support the 4.2.x and 4.3.x iRODS versions that are available through the package repositories. As of 29 November 2023, versions 4.2.2 through 4.2.12, as well as 4.3.0 through 4.3.1, are available in the repositories.
+
+The following distributions are supported:
+- iRODS 4.2.x: CentOS7 and Ubuntu 18.04 LTS (bionic)
+- iRODS 4.3.x: Ubuntu 20.04 LTS (focal)
+
+# Known issues
+
+- Logging is not yet configured for iRODS 4.3
 
 # Usage
 

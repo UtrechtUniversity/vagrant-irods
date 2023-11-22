@@ -45,21 +45,25 @@ then
 
   echo "Installing irods-commands on Ubuntu."
 
-  echo "Installing dependencies ..."
-  sudo apt-get -y install aptitude
-
   echo "Downloading and installing iRODS repository signing key ..."
   wget -qO - "$APT_IRODS_REPO_SIGNING_KEY_LOC" | sudo apt-key add -
 
   echo "Adding iRODS repository ..."
   if [ "$IRODS_VERSION" == "4.2.12" ]
   then APT_IRODS_REPO_DISTRIBUTION="bionic"
-  else APT_IRODS_REPO_DISTRIBUTION="xenial"
+  elif [[ "$IRODS_VERSION" =~ ^4\.2\. ]]
+  then APT_IRODS_REPO_DISTRIBUTION="xenial"
+  else APT_IRODS_REPO_DISTRIBUTION="focal"
   fi
+
 cat << ENDAPTREPO | sudo tee /etc/apt/sources.list.d/irods.list
 deb [arch=${APT_IRODS_REPO_ARCHITECTURE}] $APT_IRODS_REPO_URL $APT_IRODS_REPO_DISTRIBUTION $APT_IRODS_REPO_COMPONENT
 ENDAPTREPO
+
   sudo apt-get update
+
+  echo "Installing dependencies ..."
+  sudo apt-get -y install aptitude
 
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies"

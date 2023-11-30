@@ -192,10 +192,19 @@ then echo "Setting up iRODS 4.2 on provider."
 elif [[ "$IRODS_VERSION" =~ ^4\.3\. ]]
 then echo "Setting up iRODS 4.3 on provider."
      configure_provider_4dot3
+     sudo install -m 0644 -o root -g root /tmp/irods.logrotate /etc/logrotate.d/irods
+     sudo install -m 0644 -o root -g root /tmp/irods.rsyslog /etc/rsyslog.d/00-irods.conf
+     sudo mkdir /var/log/irods
+     sudo chown syslog:adm /var/log/irods
+     sudo systemctl restart rsyslog.service
 else echo "Configuring iRODS version $IRODS_VERSION has not been implemented."
+     exit 1
 fi
 
 # Restart is needed for iRODS 4.2.9+
-sudo /etc/init.d/irods restart
+if [[ "$IRODS_VERSION" =~ ^4\.2\. ]]
+then sudo /etc/init.d/irods restart
+else sudo systemctl restart irods
+fi
 
 echo "Provider install script finished."

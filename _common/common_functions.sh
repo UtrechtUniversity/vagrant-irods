@@ -173,3 +173,55 @@ cat > /etc/irods/setup_irods.json << IRODS_CONFIG_END
 IRODS_CONFIG_END
 
 }
+
+# This function installs base requirements to install iRODS 4.2.12 on Ubuntu 20.04 LTS.
+# This combination is not officially supported and requires installing some
+# non-standard distro packages. This script has been adapted from
+# https://github.com/irods/irods/issues/4883#issuecomment-731210617
+function install_focal_4dot2_base_reqs () {
+     sudo apt install -y libpython2-stdlib libpython2.7-minimal libpython2.7-stdlib \
+          python-is-python2 python-six python2 python2-minimal python2.7 python2.7-minimal \
+          python-certifi python-chardet python-idna python-pkg-resources python-setuptools
+
+     PY_URLLIB_PREFIX="http://security.ubuntu.com/ubuntu/pool/main/p/python-urllib3"
+     PY_URLLIB_FILENAME="python-urllib3_1.22-1ubuntu0.18.04.2_all.deb"
+     PY_REQUESTS_PREFIX="http://security.ubuntu.com/ubuntu/pool/main/r/requests"
+     PY_REQUESTS_FILENAME="python-requests_2.18.4-2ubuntu0.1_all.deb"
+     OPENSSL_PREFIX="http://security.ubuntu.com/ubuntu/pool/main/o/openssl1.0"
+     OPENSSL_FILENAME="libssl1.0.0_1.0.2n-1ubuntu5.13_amd64.deb"
+
+     wget \
+        ${PY_URLLIB_PREFIX}/${PY_URLLIB_FILENAME} \
+        ${PY_REQUESTS_PREFIX}/${PY_REQUESTS_FILENAME} \
+        ${OPENSSL_PREFIX}/${OPENSSL_FILENAME}
+
+     for package in $PY_URLLIB_FILENAME $PY_REQUESTS_FILENAME $OPENSSL_FILENAME
+     do echo "Installing package ${package%.*}"
+          sudo dpkg -i "$package"
+          rm "$package"
+     done
+
+}
+
+# This function installs server requirements to install iRODS 4.2.12 on Ubuntu 20.04 LTS.
+# It assumes that the base requirements have already been installed by the
+# install_focal_4dot2_base_reqs function (see above)
+function install_focal_4dot2_server_reqs () {
+     sudo apt install python-funcsigs python-mock python-pbr libodbc1
+
+     PY_JSONSCHEMA_PREFIX="http://security.ubuntu.com/ubuntu/pool/main/p/python-jsonschema"
+     PY_JSONSCHEMA_FILENAME="python-jsonschema_2.3.0-1build1_all.deb"
+
+     PY_ODBC_PREFIX="http://security.ubuntu.com/ubuntu/pool/universe/p/pyodbc"
+     PY_ODBC_FILENAME="python-pyodbc_4.0.17-1_amd64.deb"
+
+     wget ${PY_JSONSCHEMA_PREFIX}/${PY_JSONSCHEMA_FILENAME} \
+          ${PY_ODBC_PREFIX}/${PY_ODBC_FILENAME}
+
+     for package in $PY_JSONSCHEMA_FILENAME $PY_ODBC_FILENAME
+     do echo "Installing package ${package%.*}"
+        sudo dpkg -i "$package"
+	rm "$package"
+     done
+
+}

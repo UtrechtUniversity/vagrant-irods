@@ -130,9 +130,23 @@ deb [arch=${APT_IRODS_REPO_ARCHITECTURE}] $APT_IRODS_REPO_URL $APT_IRODS_REPO_DI
 ENDAPTREPO
   sudo apt-get update
 
-  if [[ "$IRODS_VERSION" =~ ^4\.3\. ]]
-  then sudo apt -y install python3-pyodbc
-  else sudo apt -y install python-pyodbc
+  RELEASE=$(lsb_release -r | cut -d ":" -f 2| xargs)
+  PYODBC_INSTALLED="NO"
+
+  if [ "$RELEASE" == "20.04" ] && [ "$IRODS_VERSION" == "4.2.12" ]
+  then echo "Running specific install steps for Ubuntu 20.04 LTS in combination with iRODS 4.2.12"
+       install_focal_4dot2_base_reqs
+       install_focal_4dot2_server_reqs
+       PYODBC_INSTALLED="YES"
+       echo "End of specific install steps for Ubuntu 20.04 LTS in combination with iRODS 4.2.12"
+  fi
+
+  if [[ "$PYODBC_INSTALLED" == "NO" ]]
+  then
+       if [[ "$IRODS_VERSION" =~ ^4\.3\. ]]
+       then sudo apt -y install python3-pyodbc
+       else sudo apt -y install python-pyodbc
+       fi
   fi
 
   echo "Installing dependencies of installation script and misc dependencies ..."

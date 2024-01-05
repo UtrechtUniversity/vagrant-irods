@@ -65,6 +65,14 @@ ENDAPTREPO
   echo "Installing dependencies ..."
   sudo apt-get -y install aptitude
 
+  RELEASE=$(lsb_release -r | cut -d ":" -f 2| xargs)
+
+  if [ "$RELEASE" == "20.04" ] && [ "$IRODS_VERSION" == "4.2.12" ]
+  then echo "Running specific install steps for Ubuntu 20.04 LTS in combination with iRODS 4.2.12"
+       install_focal_4dot2_base_reqs
+       echo "End of specific install steps for Ubuntu 20.04 LTS in combination with iRODS 4.2.12"
+  fi
+
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies"
      get_package_version "$package" "$IRODS_VERSION" "ubuntu"

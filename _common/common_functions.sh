@@ -28,6 +28,8 @@ function get_package_version()
          then package_version="4.3.1.0-0~focal"
          elif [ "$IRODS_VERSION" == "4.3.1" ] && [ "$distro" == "centos" ]
          then package_version="4.3.1.0"
+         elif [ "$IRODS_VERSION" == "4.3.2" ] && [  "$distro" == "ubuntu" ]
+         then package_version="4.3.2.0-0~focal"
          else package_version="$IRODS_VERSION"
          fi
      else
@@ -39,6 +41,8 @@ function get_package_version()
          then package_version="4.3.0-1~focal"
          elif [ "$IRODS_VERSION" == "4.3.1" ] && [  "$distro" == "ubuntu" ]
          then package_version="4.3.1-0~focal"
+         elif [ "$IRODS_VERSION" == "4.3.2" ] && [  "$distro" == "ubuntu" ]
+         then package_version="4.3.2-0~focal"
          else # shellcheck disable=SC2034
               package_version="$IRODS_VERSION"
          fi

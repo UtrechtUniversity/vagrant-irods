@@ -16,18 +16,10 @@ function get_package_version()
          then package_version="4.2.11.1-1~xenial"
          elif [ "$IRODS_VERSION" == "4.2.12" ] && [  "$distro" == "ubuntu" ]
          then package_version="4.2.12.0-1~bionic"
-         elif [ "$IRODS_VERSION" == "4.2.11" ] && [ "$distro" == "centos" ]
-         then package_version="4.2.11.1"
-         elif [ "$IRODS_VERSION" == "4.2.12" ] && [ "$distro" == "centos" ]
-         then package_version="4.2.12.0"
          elif [ "$IRODS_VERSION" == "4.3.0" ] && [  "$distro" == "ubuntu" ]
          then package_version="4.3.0.0-1~focal"
-         elif [ "$IRODS_VERSION" == "4.3.0" ] && [ "$distro" == "centos" ]
-         then package_version="4.3.0.0"
          elif [ "$IRODS_VERSION" == "4.3.1" ] && [  "$distro" == "ubuntu" ]
          then package_version="4.3.1.0-0~focal"
-         elif [ "$IRODS_VERSION" == "4.3.1" ] && [ "$distro" == "centos" ]
-         then package_version="4.3.1.0"
          elif [ "$IRODS_VERSION" == "4.3.2" ] && [  "$distro" == "ubuntu" ]
          then package_version="4.3.2.0-0~focal"
          elif [ "$IRODS_VERSION" == "4.3.3" ] && [  "$distro" == "ubuntu" ]

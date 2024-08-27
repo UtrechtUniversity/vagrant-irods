@@ -67,50 +67,8 @@ set -u
 if [ -f /etc/centos-release ]
 then
 
-  echo "Adding EPEL release repository ..."
-  sudo yum install -y epel-release
-
-  echo "Installing dependencies of installation script ..."
-  sudo yum install -y pwgen wget yum-plugin-versionlock
-
-  echo "Importing repository signing key ..."
-  sudo rpm --import "$YUM_IRODS_REPO_SIGNING_KEY_LOC"
-
-  echo "Updating certificates for retrieving repository key ..."
-  sudo yum update -y ca-certificates
-
-  echo "Adding iRODS repository ..."
-  wget -qO - "$YUM_REPO_FILE_LOC" | sudo tee /etc/yum.repos.d/renci-irods.yum.repo
-
-  for package in $YUM_DATABASE_PACKAGES
-  do echo "Installing database package $package and its dependencies ..."
-     yum -y install "$package"
-  done
-
-  for package in $YUM_PACKAGES
-  do echo "Installing package $package and its dependencies ..."
-     get_package_version "$package" "$IRODS_VERSION" "centos"
-     # $package_version is set by sourced function
-     # shellcheck disable=SC2154
-     sudo yum -y install "$package-$package_version"
-     sudo yum versionlock "$package"
-  done
-
-  echo "Initializing database ..."
-  sudo postgresql-setup initdb
-
-  echo "Configuring database authentication ..."
-  sed -i 's/^host    all             all             127.0.0.1\/32            ident$/host    all             all             127.0.0.1\/32            md5/' /var/lib/pgsql/data/pg_hba.conf
-  sed -i 's/^host    all             all             ::1\/128                 ident$/host    all             all             ::1\/128                 md5/' /var/lib/pgsql/data/pg_hba.conf
-
-  echo "Starting database ..."
-  sudo systemctl start postgresql
-  sudo systemctl enable postgresql
-
-  if [[ "$IRODS_VERSION" =~ ^4\.3\. ]]
-  then sudo yum -y install gcc gcc-c++ python36-devel unixODBC-devel
-       sudo python3 -m pip install pyodbc
-  fi
+  echo "Error: CentOS is no longer supported."
+  exit 1
 
 elif lsb_release -i | grep -q Ubuntu
 then
@@ -161,6 +119,7 @@ ENDAPTREPO
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies ..."
      get_package_version "$package" "$IRODS_VERSION" "ubuntu"
+     # shellcheck disable=SC2154
      sudo apt-get -y install "$package=$package_version"
      sudo aptitude hold "$package"
   done

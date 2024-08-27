@@ -18,7 +18,7 @@ This repository contains Vagrant configurations for local iRODS VMs.
 These scripts should support the 4.2.x and 4.3.x iRODS versions that are available through the package repositories. As of 27 August 2024, versions 4.2.2 through 4.2.12, as well as 4.3.0 through 4.3.3, are available in the repositories.
 
 The following distributions are supported:
-- iRODS 4.2.x: CentOS7 and Ubuntu 18.04 LTS (bionic)
+- iRODS 4.2.x: Ubuntu 18.04 LTS (bionic)
 - iRODS 4.2.12 and 4.3.x: Ubuntu 20.04 LTS (focal)
 
 # Usage

@@ -19,13 +19,9 @@ sudo sysctl -w "net.ipv6.conf.all.disable_ipv6=${IPV6_DISABLE}"
 
 if [ -f /etc/centos-release ]
 then
-    SYSCTLCONF="/etc/sysctl.d/50-disable-ipv6.conf"
-    echo "net.ipv6.conf.default.disable_ipv6=${IPV6_DISABLE}" | sudo tee -a "$SYSCTLCONF"
-    echo "net.ipv6.conf.all.disable_ipv6=${IPV6_DISABLE}" | sudo tee -a "$SYSCTLCONF" 
 
-    if [ "${IPV6_DISABLE}" == 1 ]
-    then echo "ip_resolve=4" | sudo tee -a /etc/yum.conf
-    fi
+  echo "Error: CentOS is no longer supported."
+  exit 1
 
 elif lsb_release -i | grep -q Ubuntu >& /dev/null
 then

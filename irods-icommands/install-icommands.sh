@@ -20,25 +20,8 @@ source /tmp/common_functions.sh
 if [ -f /etc/centos-release ]
 then 
 
-  echo "Installing irods-commands on CentOS."
-
-  echo "Installing dependencies ..."
-  sudo yum -y install wget epel-release yum-plugin-versionlock
-
-  echo "Updating certificates for retrieving repository key ..."
-  sudo yum update -y ca-certificates
-  
-  echo "Adding iRODS repository ..."
-  sudo rpm --import https://packages.irods.org/irods-signing-key.asc
-  wget -qO - https://packages.irods.org/renci-irods.yum.repo | sudo tee /etc/yum.repos.d/renci-irods.yum.repo
-
-  for package in $YUM_PACKAGES
-  do echo "Installing package $package and its dependencies"
-     get_package_version "$package" "$IRODS_VERSION" "centos"
-     # shellcheck disable=SC2154
-     sudo yum -y install "$package-${package_version}"
-     sudo yum versionlock "$package"
-  done 
+  echo "Error: CentOS is no longer supported."
+  exit 1
 
 elif lsb_release -i | grep -q Ubuntu
 then
@@ -76,6 +59,7 @@ ENDAPTREPO
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies"
      get_package_version "$package" "$IRODS_VERSION" "ubuntu"
+     # shellcheck disable=SC2154
      sudo apt-get -y install "$package=${package_version}"
      sudo aptitude hold "$package"
   done

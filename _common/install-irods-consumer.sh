@@ -60,32 +60,8 @@ set -u
 if [ -f /etc/centos-release ]
 then
 
-  echo "Adding EPEL release repository ..."
-  sudo yum install -y epel-release
-
-  echo "Installing dependencies of installation script ..."
-  sudo yum install -y pwgen wget yum-plugin-versionlock
-
-  echo "Importing repository signing key .."
-  sudo rpm --import "$YUM_IRODS_REPO_SIGNING_KEY_LOC"
-
-  echo "Updating certificates for retrieving repository key ..."
-  sudo yum update -y ca-certificates
-
-  echo "Adding iRODS repository ..."
-  wget -qO - "$YUM_REPO_FILE_LOC" | sudo tee /etc/yum.repos.d/renci-irods.yum.repo
-
-  echo "Installing package dependencies of install-irods script ..."
-  sudo yum install -y pwgen nmap
-
-  for package in $YUM_PACKAGES
-  do echo "Installing package $package and its dependencies ..."
-     get_package_version "$package" "$IRODS_VERSION" "centos"
-     # $package_version is set by sourced function
-     # shellcheck disable=SC2154
-     sudo yum -y install "$package-$package_version"
-     sudo yum versionlock "$package"
-  done
+  echo "Error: CentOS is no longer supported."
+  exit 1
 
 elif lsb_release -i | grep -q Ubuntu
 then
@@ -132,6 +108,7 @@ ENDAPTREPO
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies ..."
      get_package_version "$package" "$IRODS_VERSION" "ubuntu"
+     # shellcheck disable=SC2154
      sudo apt-get -y install "$package=$package_version"
      sudo aptitude hold "$package"
   done

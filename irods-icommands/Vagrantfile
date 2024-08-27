@@ -8,13 +8,21 @@ Vagrant.configure("2") do |config|
   config.disksize.size = ENV['DISKSPACE']
 
   config.vm.define "irods-icommands" do |vm|
+
     vm.vm.box = ENV['BOXNAME']
+
     vm.vm.provider "virtualbox" do |v|
       v.memory = ENV['MEMORY']
       # Synchronize clock in one step if difference is more than 1000 ms / 1s
       # Copied from https://stackoverflow.com/questions/19490652/how-to-sync-time-on-host-wake-up-within-virtualbox
       v.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
     end
+
+    vm.vm.provider :libvirt do |libvirt|
+      libvirt.driver = "kvm"
+      libvirt.memory = ENV['MEMORY']
+    end
+
     vm.vm.provision "file", source: ".env", destination: "/tmp/irods-test.env"
     vm.vm.provision "file", source: "../_common/common_functions.sh", destination: "/tmp/common_functions.sh"
     vm.vm.provision :shell, :path => '../_common/update-ipv6-settings.sh', :args => "/tmp/irods-test.env"

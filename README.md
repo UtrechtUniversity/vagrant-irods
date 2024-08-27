@@ -4,9 +4,10 @@ This repository contains Vagrant configurations for local iRODS VMs.
 
 # Prerequisites
 
-* Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+* Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads), or alternatively use Libvirt with KVM
 * Install [Vagrant 2.x](https://www.vagrantup.com/downloads.html)
 * Install the vagrant-env and vagrant-disksize plugin:  _vagrant plugin install vagrant-env vagrant-disksize_
+* You may need to update your Vagrant libvirt plugin if it's old, e.g.: _vagrant plugin install vagrant-libvirt --plugin-version 0.12.2_
 
 # Included configurations
 
@@ -27,5 +28,6 @@ The following distributions are supported:
 - Clone the vagrant-irods repository: _git clone https://github.com/utrechtuniversity/vagrant-irods.git_
 - Go to the configuration directory. For example : _cd vagrant-irods/irods-single-server_
 - Optionally adjust the settings in the .env file. You might want to change the image of the VM, the amount of memory assigned to the VM or the iRODS version to be installed.
+- If you want to use Libvirt rather than VirtualBox, change the Vagrant default provider: _export VAGRANT_DEFAULT_PROVIDER=libvirt_
 - Start and provision the VM(s): _vagrant up_
 - After the VM is provisioned, you should be able to log in using _vagrant ssh_. In case of the provider-consumer setup, use _vagrant ssh provider_ or _vagrant ssh consumer_.

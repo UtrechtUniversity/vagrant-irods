@@ -126,6 +126,7 @@ ENDAPTREPO
   fi
 
   echo "Installing dependencies of installation script ..."
+  sudo apt-get update
   sudo apt-get install -y pwgen nmap aptitude python3-pip
 
   for package in $APT_PACKAGES

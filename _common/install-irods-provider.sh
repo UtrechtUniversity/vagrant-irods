@@ -150,6 +150,7 @@ ENDAPTREPO
   fi
 
   echo "Installing dependencies of installation script and misc dependencies ..."
+  sudo apt-get update
   sudo apt-get -y install aptitude pwgen python3-pip
 
   for package in $APT_DATABASE_PACKAGES

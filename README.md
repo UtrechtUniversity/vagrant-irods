@@ -6,7 +6,10 @@ This repository contains Vagrant configurations for local iRODS VMs.
 
 * Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads), or alternatively use Libvirt with KVM
 * Install [Vagrant 2.x](https://www.vagrantup.com/downloads.html)
-* Install the vagrant-env and vagrant-disksize plugin:  _vagrant plugin install vagrant-env vagrant-disksize_
+* Install plugins depending on the provider:
+  - For VirtualBox, install the vagrant-env and vagrant-disksize plugin:  _vagrant plugin install vagrant-env vagrant-disksize_
+  - For Libvirt, install only the vagrant-env plugin:  _vagrant plugin install vagrant-env_ (since the disksize plugin is incompatible with the Libvirt provider)
+
 * You may need to update your Vagrant libvirt plugin if it's old, e.g.: _vagrant plugin install vagrant-libvirt --plugin-version 0.12.2_
 
 # Included configurations
@@ -20,6 +23,7 @@ These scripts should support the 4.2.x and 4.3.x iRODS versions that are availab
 The following distributions are supported:
 - iRODS 4.2.x: Ubuntu 18.04 LTS (bionic)
 - iRODS 4.2.12 and 4.3.x: Ubuntu 20.04 LTS (focal)
+- iRODS 4.3.4 and up: Ubuntu 24.04 LTS (noble)
 
 # Usage
 

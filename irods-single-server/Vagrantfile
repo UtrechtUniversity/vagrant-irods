@@ -1,3 +1,5 @@
+VAGRANT_DEFAULT_PROVIDER = "libvirt"
+
 Vagrant.configure("2") do |config|
 
   config.env.enable
@@ -6,7 +8,7 @@ Vagrant.configure("2") do |config|
   # https://superuser.com/questions/1160025/how-to-solve-ttyname-failed-inappropriate-ioctl-for-device-in-vagrant
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
-  config.disksize.size = ENV['DISKSPACE']
+  #config.disksize.size = ENV['DISKSPACE']
 
   config.vm.define "provider" do |provider|
     provider.vm.box = ENV['BOXNAME']

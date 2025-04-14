@@ -4,6 +4,11 @@ function get_package_version()
      local package="$1"
      local IRODS_VERSION="$2"
      local distro="$3"
+     local codename
+     if [ "$distro" == "ubuntu" ]
+     then codename=$(lsb_release -sc)
+     else codename="N/A"
+     fi
      if [ "$package" == "irods-rule-engine-plugin-python" ]
      then
          if [ "$IRODS_VERSION" == "4.2.8" ]
@@ -13,36 +18,36 @@ function get_package_version()
          elif [ "$IRODS_VERSION" == "4.2.10" ]
          then package_version="4.2.10.0"
          elif [ "$IRODS_VERSION" == "4.2.11" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.2.11.1-1~xenial"
+         then package_version="4.2.11.1-1~xenial"  # This codename needs to be hardcoded
          elif [ "$IRODS_VERSION" == "4.2.12" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.2.12.0-1~bionic"
+         then package_version="4.2.12.0-1~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.0" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.0.0-1~focal"
+         then package_version="4.3.0.0-1~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.1" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.1.0-0~focal"
+         then package_version="4.3.1.0-0~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.2" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.2.0-0~focal"
+         then package_version="4.3.2.0-0~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.3" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.3.0-0+4.3.3~focal"
+         then package_version="4.3.3.0-0+4.3.3~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.4" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.4.0-0+4.3.4~focal"
+         then package_version="4.3.4.0-0+4.3.4~${codename}"
          else package_version="$IRODS_VERSION"
          fi
      else
          if [ "$IRODS_VERSION" == "4.2.11" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.2.11-1~xenial"
+         then package_version="4.2.11-1~xenial"  # This codename needs to be hardcoded
 	 elif [ "$IRODS_VERSION" == "4.2.12" ] && [ "$distro" == "ubuntu" ]
-	 then package_version="4.2.12-1~bionic"
+	 then package_version="4.2.12-1~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.0" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.0-1~focal"
+         then package_version="4.3.0-1~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.1" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.1-0~focal"
+         then package_version="4.3.1-0~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.2" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.2-0~focal"
+         then package_version="4.3.2-0~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.3" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.3-0~focal"
+         then package_version="4.3.3-0~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.4" ] && [  "$distro" == "ubuntu" ]
-         then package_version="4.3.4-0~focal"
+         then package_version="4.3.4-0~${codename}"
          else # shellcheck disable=SC2034
               package_version="$IRODS_VERSION"
          fi

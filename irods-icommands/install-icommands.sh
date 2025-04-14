@@ -36,7 +36,7 @@ then
   then APT_IRODS_REPO_DISTRIBUTION="bionic"
   elif [[ "$IRODS_VERSION" =~ ^4\.2\. ]]
   then APT_IRODS_REPO_DISTRIBUTION="xenial"
-  else APT_IRODS_REPO_DISTRIBUTION="focal"
+  else APT_IRODS_REPO_DISTRIBUTION=$(lsb_release -sc)
   fi
 
 cat << ENDAPTREPO | sudo tee /etc/apt/sources.list.d/irods.list

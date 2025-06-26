@@ -31,6 +31,10 @@ function get_package_version()
          then package_version="4.3.3.0-0+4.3.3~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.4" ] && [  "$distro" == "ubuntu" ]
          then package_version="4.3.4.0-0+4.3.4~${codename}"
+         elif [ "$IRODS_VERSION" == "5.0.0" ] && [  "$distro" == "ubuntu" ]
+         then package_version="5.0.0.0-0+5.0.0~${codename}"
+         elif [ "$IRODS_VERSION" == "5.0.1" ] && [  "$distro" == "ubuntu" ]
+         then package_version="5.0.0.0-0+5.0.1~${codename}"
          else package_version="$IRODS_VERSION"
          fi
      else
@@ -48,6 +52,10 @@ function get_package_version()
          then package_version="4.3.3-0~${codename}"
          elif [ "$IRODS_VERSION" == "4.3.4" ] && [  "$distro" == "ubuntu" ]
          then package_version="4.3.4-0~${codename}"
+	 elif [ "$IRODS_VERSION" == "5.0.0" ] && [  "$distro" == "ubuntu" ]
+         then package_version="5.0.0-0~${codename}"
+         elif [ "$IRODS_VERSION" == "5.0.1" ] && [  "$distro" == "ubuntu" ]
+         then package_version="5.0.1-0~${codename}"
          else # shellcheck disable=SC2034
               package_version="$IRODS_VERSION"
          fi

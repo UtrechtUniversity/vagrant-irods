@@ -44,6 +44,12 @@ configure_provider_4dot3 () {
 	sudo python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file /tmp/provider-unattended-install.irods-4.3.config
 }
 
+configure_provider_5dot0 () {
+        export PROVIDER_HOSTNAME DB_PASSWORD ZONE_NAME ZONE_KEY NEG_KEY CP_KEY ADMIN_PASSWORD
+        envsubst < /tmp/provider-unattended-install.irods-5.0.template > /tmp/provider-unattended-install.irods-5.0.config
+        echo "$PROVIDER_HOSTNAME" | sudo python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file /tmp/provider-unattended-install.irods-5.0.config
+}
+
 export DEBIAN_FRONTEND=noninteractive
 
 SETTINGSFILE=${1:-./local-repo.env}
@@ -101,7 +107,7 @@ ENDAPTREPO
 
   if [[ "$PYODBC_INSTALLED" == "NO" ]]
   then
-       if [[ "$IRODS_VERSION" =~ ^4\.3\. ]]
+       if [[ "$IRODS_VERSION" =~ ^4\.3\. ]] || [[ "$IRODS_VERSION" =~ ^5\.0\. ]]
        then sudo apt -y install python3-pyodbc
        else sudo apt -y install python-pyodbc
        fi
@@ -167,13 +173,43 @@ then echo "Setting up iRODS 4.2 on provider."
 elif [[ "$IRODS_VERSION" =~ ^4\.3\. ]]
 then echo "Setting up iRODS 4.3 on provider."
      configure_provider_4dot3
+elif [[ "$IRODS_VERSION" =~ ^5\.0\. ]]
+then echo "Setting up iRODS 5.0 on provider."
+     configure_provider_5dot0
+else echo "Configuring iRODS version $IRODS_VERSION has not been implemented."
+     exit 1
+fi
+
+if [[ "$IRODS_VERSION" =~ ^4\.3\. ]] || [[ "$IRODS_VERSION" =~ ^5\.0\. ]]
+then echo "Setting up logging for iRODS."
      sudo install -m 0644 -o root -g root /tmp/irods.logrotate /etc/logrotate.d/irods
      sudo install -m 0644 -o root -g root /tmp/irods.rsyslog /etc/rsyslog.d/00-irods.conf
      sudo mkdir /var/log/irods
      sudo chown syslog:adm /var/log/irods
      sudo systemctl restart rsyslog.service
-else echo "Configuring iRODS version $IRODS_VERSION has not been implemented."
-     exit 1
+fi
+
+if  [[ "$IRODS_VERSION" =~ ^5\.0\. ]]
+then echo "Setting up systemd service for iRODS."
+cat > /usr/lib/systemd/system/irods.service << SERVICE
+[Unit]
+Description=iRODS
+After=network.target
+
+[Service]
+Type=notify-reload
+ExecStart=/usr/sbin/irodsServer
+KillMode=mixed
+Restart=on-failure
+User=irods
+Group=irods
+WorkingDirectory=/var/lib/irods
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=multi-user.target
+SERVICE
+sudo systemctl daemon-reload
 fi
 
 # Restart is needed for iRODS 4.2.9+

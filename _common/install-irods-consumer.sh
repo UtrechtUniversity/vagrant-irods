@@ -109,7 +109,7 @@ ENDAPTREPO
 
   echo "Installing dependencies of installation script ..."
   sudo apt-get update
-  sudo apt-get install -y pwgen nmap aptitude python3-pip
+  sudo apt-get install -y pwgen nmap aptitude python3-pip python3.12-venv
 
   for package in $APT_PACKAGES
   do echo "Installing package $package and its dependencies ..."

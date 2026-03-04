@@ -115,7 +115,7 @@ ENDAPTREPO
 
   echo "Installing dependencies of installation script and misc dependencies ..."
   sudo apt-get update
-  sudo apt-get -y install aptitude pwgen python3-pip
+  sudo apt-get -y install aptitude pwgen python3-pip python3.12-venv
 
   for package in $APT_DATABASE_PACKAGES
   do echo "Installing database package $package and its dependencies ..."
